@@ -59,7 +59,8 @@ impl Instance {
     pub fn run(mut self) {
         let mut frame_start = Instant::now();
         let mut forward = 0.0;
-
+        let mut strafe = 0.0;
+        let mut vertical = 0.0;
         self.window.set_cursor_visible(false);
         self.window
             .set_cursor_grab(CursorGrabMode::Confined)
@@ -100,6 +101,63 @@ impl Instance {
                             } => {
                                 forward = 0.0;
                             }
+                            KeyboardInput {
+                                state: ElementState::Pressed,
+                                virtual_keycode: Some(VirtualKeyCode::A),
+                                ..
+                            } => {
+                                strafe = -1.0;
+                            }
+                            KeyboardInput {
+                                state: ElementState::Released,
+                                virtual_keycode: Some(VirtualKeyCode::A),
+                                ..
+                            } => {
+                                strafe = 0.0;
+                            }
+                            KeyboardInput {
+                                state: ElementState::Pressed,
+                                virtual_keycode: Some(VirtualKeyCode::D),
+                                ..
+                            } => {
+                                strafe = 1.0;
+                            }
+                            KeyboardInput {
+                                state: ElementState::Released,
+                                virtual_keycode: Some(VirtualKeyCode::D),
+                                ..
+                            } => {
+                                strafe = 0.0;
+                            }
+                            KeyboardInput {
+                                state: ElementState::Pressed,
+                                virtual_keycode: Some(VirtualKeyCode::Space),
+                                ..
+                            } => {
+                                vertical = 1.0;
+                            }
+                            KeyboardInput {
+                                state: ElementState::Released,
+                                virtual_keycode: Some(VirtualKeyCode::Space),
+                                ..
+                            } => {
+                                vertical = 0.0;
+                            }
+                            KeyboardInput {
+                                state: ElementState::Pressed,
+                                virtual_keycode: Some(VirtualKeyCode::LShift),
+                                ..
+                            } => {
+                                vertical = -1.0;
+                            }
+                            KeyboardInput {
+                                state: ElementState::Released,
+                                virtual_keycode: Some(VirtualKeyCode::LShift),
+                                ..
+                            } => {
+                                vertical = 0.0;
+                            }
+
                             _ => {}
                         },
                         WindowEvent::Resized(physical_size) => {
@@ -114,9 +172,10 @@ impl Instance {
                 Event::RedrawRequested(_) => {
                     let frame_time = Instant::now().duration_since(frame_start).as_secs_f32();
 
-                    self.renderer.camera.pos +=
-                        self.renderer.camera.direction() * forward * frame_time * 180.0;
-
+                    self.renderer.camera.pos.x += ((self.renderer.camera.yaw.cos() as f64) * forward - (self.renderer.camera.yaw.sin() as f64) * strafe) as f32;
+                    self.renderer.camera.pos.z += ((self.renderer.camera.yaw.sin() as f64) * forward + (self.renderer.camera.yaw.cos() as f64) * strafe) as f32;
+                    self.renderer.camera.pos.y += vertical as f32;
+                
                     let frame = self.renderer.state.surface.0.get_current_texture().unwrap();
                     self.renderer.render(&frame);
                     frame.present();
