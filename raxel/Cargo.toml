@@ -1,0 +1,19 @@
+[package]
+name = "raxel"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bytemuck = { version = "1.13.1", features = ["derive"] }
+futures = "0.3.28"
+image = { version = "0.24.6", default-features = false, features = ["png"] }
+naga = "0.11.0"
+noise = "0.8.2"
+once_cell = "1.17.1"
+rayon = "1.7.0"
+ultraviolet = { version = "0.9.1", features = [ "int", "bytemuck" ] }
+untyped-arena = "0.1.1"
+wgpu = "0.15.1"
+winit = "0.28.3"

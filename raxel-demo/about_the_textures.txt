@@ -1,0 +1,5 @@
+This won't launch unless you provide images in src/texture/, those are:
+- dirt.png
+- grass_side.png
+- grass_top.png
+- stone.png
