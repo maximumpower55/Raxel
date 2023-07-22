@@ -489,6 +489,8 @@ impl Renderer {
     }
 
     pub fn resize(&mut self, new_size: PhysicalSize<u32>) {
+        if new_size.width == 0 || new_size.height == 0 { return; }
+
         let mut surface_configuration = &mut self.state.surface.1;
 
         surface_configuration.width = new_size.width;
