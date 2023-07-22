@@ -172,9 +172,9 @@ impl Instance {
                 Event::RedrawRequested(_) => {
                     let frame_time = Instant::now().duration_since(frame_start).as_secs_f32();
 
-                    self.renderer.camera.pos.x += ((self.renderer.camera.yaw.cos() as f64) * forward - (self.renderer.camera.yaw.sin() as f64) * strafe) as f32;
-                    self.renderer.camera.pos.z += ((self.renderer.camera.yaw.sin() as f64) * forward + (self.renderer.camera.yaw.cos() as f64) * strafe) as f32;
-                    self.renderer.camera.pos.y += vertical as f32;
+                    self.renderer.camera.pos.x += (((self.renderer.camera.yaw.cos()) * forward - (self.renderer.camera.yaw.sin()) * strafe)) * frame_time * 180.0;
+                    self.renderer.camera.pos.z += (((self.renderer.camera.yaw.sin()) * forward + (self.renderer.camera.yaw.cos()) * strafe)) * frame_time * 180.0;
+                    self.renderer.camera.pos.y += vertical * frame_time * 180.0;
                 
                     let frame = self.renderer.state.surface.0.get_current_texture().unwrap();
                     self.renderer.render(&frame);
